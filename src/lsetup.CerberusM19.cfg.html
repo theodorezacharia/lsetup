@@ -1,0 +1,87 @@
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span></span>{
+        <span style="color: #008000; font-weight: bold">&quot;service&quot;</span>: <span style="color: #BA2121">&quot;vpn&quot;</span>,
+        <span style="color: #008000; font-weight: bold">&quot;type&quot;</span>: <span style="color: #BA2121">&quot;proton&quot;</span>,
+        <span style="color: #008000; font-weight: bold">&quot;description&quot;</span>: <span style="color: #BA2121">&quot;Setup VPN for Proton&quot;</span>,
+        <span style="color: #008000; font-weight: bold">&quot;steps&quot;</span> :
+        [
+                <span style="color: #BA2121">&quot;VPNLIST=&#39;jp-free-01.protonvpn.net.udp.ovpn nl-free-01.protonvpn.net.udp.ovpn us-free-01.protonvpn.net.udp.ovpn&#39;&quot;</span>,
+                <span style="color: #BA2121">&quot;VPNRND=$[ $RANDOM % 3 + 1 ]&quot;</span>,
+                <span style="color: #BA2121">&quot;VPNCFG=$(echo $VPNLIST | cut -d&#39; &#39; -f $VPNRND)&quot;</span>,
+                <span style="color: #BA2121">&quot;echo Using ProtonVPN: $VPNCFG&quot;</span>,
+                <span style="color: #BA2121">&quot;sudo openvpn --config work/ddrive/PDrive/ProtonVPN/$VPNCFG&quot;</span>
+        ]
+}
+{
+	<span style="color: #008000; font-weight: bold">&quot;service&quot;</span>: <span style="color: #BA2121">&quot;lan&quot;</span>,
+	<span style="color: #008000; font-weight: bold">&quot;type&quot;</span>: <span style="color: #BA2121">&quot;&quot;</span>,
+	<span style="color: #008000; font-weight: bold">&quot;description&quot;</span>: <span style="color: #BA2121">&quot;Setup mount point for network drive, Setting up LAN with optional filter for drives, use names from mounts.lsetup.conf&quot;</span>,
+	<span style="color: #008000; font-weight: bold">&quot;steps&quot;</span> :
+	[
+		<span style="color: #BA2121">&quot;./mlan.lsetup.sh mounts.lsetup.conf $2&quot;</span>,
+		<span style="color: #BA2121">&quot;echo \&quot;Mounting completed at $(date)\&quot;&quot;</span>
+	]
+}
+{
+	<span style="color: #008000; font-weight: bold">&quot;service&quot;</span>: <span style="color: #BA2121">&quot;home&quot;</span>,
+	<span style="color: #008000; font-weight: bold">&quot;type&quot;</span>: <span style="color: #BA2121">&quot;t&quot;</span>,
+	<span style="color: #008000; font-weight: bold">&quot;description&quot;</span>: <span style="color: #BA2121">&quot;Open preconfigured terminal windows for home operations&quot;</span>,
+	<span style="color: #008000; font-weight: bold">&quot;steps&quot;</span> :
+	[
+		<span style="color: #BA2121">&quot;mate-terminal --load-config=mateterm.lsetup.conf&quot;</span>
+	]
+}
+{
+	<span style="color: #008000; font-weight: bold">&quot;service&quot;</span>: <span style="color: #BA2121">&quot;home&quot;</span>,
+	<span style="color: #008000; font-weight: bold">&quot;type&quot;</span>: <span style="color: #BA2121">&quot;apps&quot;</span>,
+	<span style="color: #008000; font-weight: bold">&quot;description&quot;</span>: <span style="color: #BA2121">&quot;Run all the home apps&quot;</span>,
+	<span style="color: #008000; font-weight: bold">&quot;steps&quot;</span> :
+	[
+        <span style="color: #BA2121">&quot;sudo ./startvnc.sh &amp;&quot;</span>,
+		<span style="color: #BA2121">&quot;sleep 2&quot;</span>,
+        <span style="color: #BA2121">&quot;./lsetup.sh smb&quot;</span>,
+		<span style="color: #BA2121">&quot;sleep 2&quot;</span>,
+		<span style="color: #BA2121">&quot;if ! pgrep firefox &gt;/dev/null ; then firefox http://localhost:32400/web/index.html#!/settings/server/yourplexid/manage/libraries ; sleep 2 ; fi &amp;&quot;</span>,
+		<span style="color: #BA2121">&quot;sleep 2&quot;</span>,
+		<span style="color: #BA2121">&quot;echo \&quot;Home Apps Started at $(date)\&quot;&quot;</span>
+	]
+}
+{
+	<span style="color: #008000; font-weight: bold">&quot;service&quot;</span>: <span style="color: #BA2121">&quot;vnc&quot;</span>,
+	<span style="color: #008000; font-weight: bold">&quot;type&quot;</span>: <span style="color: #BA2121">&quot;&quot;</span>,
+	<span style="color: #008000; font-weight: bold">&quot;description&quot;</span>: <span style="color: #BA2121">&quot;Start xvnc services for sharing the Desktop&quot;</span>,
+	<span style="color: #008000; font-weight: bold">&quot;steps&quot;</span> :
+	[
+		<span style="color: #BA2121">&quot;sudo systemctl start x11vnc.service&quot;</span>
+	]
+}
+{
+	<span style="color: #008000; font-weight: bold">&quot;service&quot;</span>: <span style="color: #BA2121">&quot;smb&quot;</span>,
+	<span style="color: #008000; font-weight: bold">&quot;type&quot;</span>: <span style="color: #BA2121">&quot;&quot;</span>,
+	<span style="color: #008000; font-weight: bold">&quot;description&quot;</span>: <span style="color: #BA2121">&quot;Start samba services for sharing disks with Windows&quot;</span>,
+	<span style="color: #008000; font-weight: bold">&quot;steps&quot;</span> :
+	[
+		<span style="color: #BA2121">&quot;sudo touch /etc/libuser.conf&quot;</span>,
+		<span style="color: #BA2121">&quot;sudo system-config-samba &amp;&quot;</span>
+	]
+}
+{
+	<span style="color: #008000; font-weight: bold">&quot;service&quot;</span>: <span style="color: #BA2121">&quot;syncme&quot;</span>,
+	<span style="color: #008000; font-weight: bold">&quot;type&quot;</span>: <span style="color: #BA2121">&quot;&quot;</span>,
+	<span style="color: #008000; font-weight: bold">&quot;description&quot;</span>: <span style="color: #BA2121">&quot;Syncing this script and files to a local share/backup&quot;</span>,
+	<span style="color: #008000; font-weight: bold">&quot;steps&quot;</span> :
+	[
+		<span style="color: #BA2121">&quot;cp lsetup.CerberusM19.cfg ./work/home/shell/machine_setup&quot;</span>,
+		<span style="color: #BA2121">&quot;if [ $? -eq 0 ] ; then echo &#39;lsetup files synced&#39; ; aplay -q ~/work/ddrive/userdata/sounds/notifications/mixkit-confirmation-tone-2867.wav ; else echo &#39;failed to sync lsetup files&#39; ; fi &quot;</span>
+
+	]
+}
+{
+	<span style="color: #008000; font-weight: bold">&quot;service&quot;</span>: <span style="color: #BA2121">&quot;kc&quot;</span>,
+	<span style="color: #008000; font-weight: bold">&quot;type&quot;</span>: <span style="color: #BA2121">&quot;&quot;</span>,
+	<span style="color: #008000; font-weight: bold">&quot;description&quot;</span>: <span style="color: #BA2121">&quot;Quickly kill any hanging chrome instances, currently kills something else, so beware !&quot;</span>,
+	<span style="color: #008000; font-weight: bold">&quot;steps&quot;</span> :
+	[
+		<span style="color: #BA2121">&quot;for A in `ps -ef | grep field | awk &#39;{print $2}&#39;`; do kill -9 $A;done&quot;</span>
+	]
+}
+</pre></div>

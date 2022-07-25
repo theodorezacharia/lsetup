@@ -1,0 +1,150 @@
+<div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span></span>&lt;<span style="color: #408080; font-style: italic">#</span>
+Author: Theodore Zacharia
+V0.1 - <span style="color: #666666">19</span>/07/2022 - Initial Release of Windows PowerShell version, from V0.2 Bourne shell version
+
+Execute instructions in the json config file
+Config files are in order of preference: Machine name specific, o/s specific, default.
+
+MANDATORY: This script uses the excellent <span style="color: #BA2121">&#39;jq&#39;</span> utility,
+        which MUST be available <span style="color: #008000; font-weight: bold">for</span> the script to work
+
+WINDOWS SPECIFIC:
+You might need to <span style="color: #008000; font-weight: bold">do</span> the following in an Admin Powershell script:
+    Set-ExecutionPolicy Unrestricted
+    or to avoid prompts each <span style="color: #008000">time</span> you try to run
+    Set-ExecutionPolicy Bypass -Scope CurrentUser
+<span style="color: #408080; font-style: italic">#&gt;</span>
+
+&lt;<span style="color: #408080; font-style: italic"># Globals #&gt;</span>
+<span style="color: #19177C">$LSETUPCFG</span><span style="color: #666666">=</span><span style="color: #BA2121">&#39;lsetup.cfg&#39;</span>    <span style="color: #408080; font-style: italic"># the default lsetup config file</span>
+<span style="color: #19177C">$MNTFILTR</span><span style="color: #666666">=</span><span style="color: #BA2121">&quot;&quot;</span>
+<span style="color: #19177C">$FORCEIT</span><span style="color: #666666">=0</span>
+<span style="color: #19177C">$TRACE</span><span style="color: #666666">=0</span>
+<span style="color: #19177C">$TRUNSTEPS</span><span style="color: #666666">=</span><span style="color: #BA2121">&#39;lsetup.tmp.tmp&#39;</span>
+<span style="color: #19177C">$FINDCONFIGFILE</span><span style="color: #666666">=1</span>
+<span style="color: #19177C">$LSETUPCFGFORCE</span><span style="color: #666666">=</span><span style="color: #BA2121">&quot;&quot;</span>
+<span style="color: #19177C">$POSARGSTART</span><span style="color: #666666">=0</span>
+
+&lt;<span style="color: #408080; font-style: italic"># Mainline #&gt;</span>
+<span style="color: #19177C">$TRACE</span><span style="color: #666666">=0</span>
+<span style="color: #19177C">$i2</span><span style="color: #666666">=0</span>
+
+write-host <span style="color: #BA2121">&quot;There are a total of </span><span style="color: #008000; font-weight: bold">$(</span><span style="color: #19177C">$args</span>.count<span style="color: #008000; font-weight: bold">)</span><span style="color: #BA2121"> arguments&quot;</span>
+<span style="color: #008000; font-weight: bold">for</span> <span style="color: #666666">(</span> <span style="color: #19177C">$i</span> <span style="color: #666666">=</span> <span style="color: #666666">0</span>; <span style="color: #19177C">$i</span> -lt <span style="color: #19177C">$args</span>.count; <span style="color: #19177C">$i</span>++ <span style="color: #666666">)</span> <span style="color: #666666">{</span>
+    write-host <span style="color: #BA2121">&quot;Argument </span><span style="color: #19177C">$i</span><span style="color: #BA2121"> is </span><span style="color: #008000; font-weight: bold">$(</span><span style="color: #19177C">$args</span><span style="color: #666666">[</span><span style="color: #19177C">$i</span><span style="color: #666666">]</span><span style="color: #008000; font-weight: bold">)</span><span style="color: #BA2121">&quot;</span>
+
+    <span style="color: #008000; font-weight: bold">if</span> <span style="color: #666666">(</span> <span style="color: #19177C">$args</span><span style="color: #666666">[</span><span style="color: #19177C">$i</span><span style="color: #666666">]</span> -eq <span style="color: #BA2121">&#39;-t&#39;</span> <span style="color: #666666">)</span> <span style="color: #666666">{</span>
+        write-host <span style="color: #BA2121">&quot;setting -t NOTE -T is same in PowerShell&quot;</span>
+        <span style="color: #19177C">$TRACE</span><span style="color: #666666">=1</span>
+        <span style="color: #19177C">$i2</span><span style="color: #666666">=</span><span style="color: #19177C">$i2</span>+1
+    <span style="color: #666666">}</span>
+    elseif <span style="color: #666666">(</span> <span style="color: #19177C">$args</span><span style="color: #666666">[</span><span style="color: #19177C">$i</span><span style="color: #666666">]</span> -eq <span style="color: #BA2121">&#39;-c&#39;</span> <span style="color: #666666">)</span> <span style="color: #666666">{</span>
+        <span style="color: #19177C">$i1</span><span style="color: #666666">=</span><span style="color: #19177C">$i</span>+1
+        write-host <span style="color: #BA2121">&quot;setting -c with </span><span style="color: #008000; font-weight: bold">$(</span><span style="color: #19177C">$args</span><span style="color: #666666">[</span><span style="color: #19177C">$i1</span><span style="color: #666666">]</span><span style="color: #008000; font-weight: bold">)</span><span style="color: #BA2121">&quot;</span>
+        <span style="color: #19177C">$LSETUPCFGFORCE</span><span style="color: #666666">=</span><span style="color: #008000; font-weight: bold">$(</span><span style="color: #19177C">$args</span><span style="color: #666666">[</span><span style="color: #19177C">$i1</span><span style="color: #666666">]</span><span style="color: #008000; font-weight: bold">)</span>
+        <span style="color: #19177C">$i</span><span style="color: #666666">=</span><span style="color: #19177C">$i</span>+1
+        <span style="color: #19177C">$i2</span><span style="color: #666666">=</span><span style="color: #19177C">$i2</span>+1
+    <span style="color: #666666">}</span>
+    elseif <span style="color: #666666">(</span> <span style="color: #19177C">$args</span><span style="color: #666666">[</span><span style="color: #19177C">$i</span><span style="color: #666666">]</span> -eq <span style="color: #BA2121">&#39;-f&#39;</span> <span style="color: #666666">)</span> <span style="color: #666666">{</span>
+        <span style="color: #19177C">$FORCEIT</span><span style="color: #666666">=1</span>
+        <span style="color: #19177C">$i2</span><span style="color: #666666">=</span><span style="color: #19177C">$i2</span>+1
+    <span style="color: #666666">}</span>
+    elseif <span style="color: #666666">(</span> <span style="color: #19177C">$args</span><span style="color: #666666">[</span><span style="color: #19177C">$i</span><span style="color: #666666">]</span> -eq <span style="color: #BA2121">&#39;-d&#39;</span> <span style="color: #666666">)</span> <span style="color: #666666">{</span>
+        <span style="color: #19177C">$FINDCONFIGFILE</span><span style="color: #666666">=0</span>
+        <span style="color: #19177C">$i2</span><span style="color: #666666">=</span><span style="color: #19177C">$i2</span>+1
+    <span style="color: #666666">}</span>
+    <span style="color: #008000; font-weight: bold">else</span>
+    <span style="color: #666666">{</span>
+        <span style="color: #008000; font-weight: bold">if</span> <span style="color: #666666">(</span> <span style="color: #19177C">$POSARGSTART</span> -eq <span style="color: #666666">0</span> <span style="color: #666666">)</span> <span style="color: #666666">{</span> <span style="color: #19177C">$POSARGSTART</span><span style="color: #666666">=</span><span style="color: #19177C">$i2</span>; <span style="color: #666666">}</span>
+    <span style="color: #666666">}</span>
+
+    <span style="color: #408080; font-style: italic"># if not one of the above must be a positional one, so set here</span>
+<span style="color: #666666">}</span>
+
+<span style="color: #008000; font-weight: bold">if</span> <span style="color: #666666">(</span><span style="color: #19177C">$TRACE</span> -gt <span style="color: #666666">0)</span> <span style="color: #666666">{</span>
+    write-host <span style="color: #BA2121">&quot;trace is on (</span><span style="color: #19177C">$trace</span><span style="color: #BA2121">)&quot;</span>
+    write-host <span style="color: #BA2121">&quot;Starting at </span><span style="color: #008000; font-weight: bold">$(</span>get-date -Format F<span style="color: #008000; font-weight: bold">)</span><span style="color: #BA2121">&quot;</span>
+<span style="color: #666666">}</span>
+
+
+
+<span style="color: #008000; font-weight: bold">if</span> <span style="color: #666666">(</span> <span style="color: #19177C">$args</span>.count -eq <span style="color: #666666">0)</span>
+<span style="color: #666666">{</span>
+    write-host <span style="color: #BA2121">&quot;see option -h for help&quot;</span>
+    <span style="color: #008000">exit</span> <span style="color: #666666">1</span>
+<span style="color: #666666">}</span>
+
+
+<span style="color: #408080; font-style: italic"># find which config file to use</span>
+<span style="color: #008000; font-weight: bold">if</span> <span style="color: #666666">(</span> <span style="color: #19177C">$FINDCONFIGFILE</span> -eq <span style="color: #666666">1</span> <span style="color: #666666">)</span>
+<span style="color: #666666">{</span>
+    <span style="color: #008000; font-weight: bold">if</span> <span style="color: #666666">(</span> <span style="color: #BA2121">&quot;</span><span style="color: #19177C">$LSETUPCFGFORCE</span><span style="color: #BA2121">&quot;</span> -ne <span style="color: #BA2121">&quot;&quot;</span> <span style="color: #666666">)</span>
+    <span style="color: #666666">{</span>
+        <span style="color: #19177C">$LSETUPCFG</span><span style="color: #666666">=</span><span style="color: #19177C">$LSETUPCFGFORCE</span>
+    <span style="color: #666666">}</span>
+    <span style="color: #008000; font-weight: bold">else</span>
+    <span style="color: #666666">{</span>
+        <span style="color: #408080; font-style: italic"># Look for Linux/Windows/Mac etc</span>
+        <span style="color: #19177C">$CMPOS</span><span style="color: #666666">=</span><span style="color: #BA2121">&quot;</span><span style="color: #19177C">$env</span><span style="color: #BA2121">:os&quot;</span>
+        <span style="color: #19177C">$CHKLSETUP</span><span style="color: #666666">=</span><span style="color: #BA2121">&quot;lsetup.</span><span style="color: #BB6688; font-weight: bold">${</span><span style="color: #19177C">CMPOS</span><span style="color: #BB6688; font-weight: bold">}</span><span style="color: #BA2121">.cfg&quot;</span>
+        <span style="color: #008000; font-weight: bold">if</span> <span style="color: #666666">(</span> Test-Path <span style="color: #BA2121">&quot;</span><span style="color: #19177C">$CHKLSETUP</span><span style="color: #BA2121">&quot;</span> <span style="color: #666666">)</span>
+        <span style="color: #666666">{</span>
+            <span style="color: #19177C">$LSETUPCFG</span><span style="color: #666666">=</span><span style="color: #19177C">$CHKLSETUP</span>
+        <span style="color: #666666">}</span>
+
+        <span style="color: #408080; font-style: italic"># Look for a machine name specific file</span>
+        <span style="color: #19177C">$CMPNM</span><span style="color: #666666">=</span><span style="color: #BA2121">&quot;</span><span style="color: #19177C">$env</span><span style="color: #BA2121">:computername&quot;</span>
+        write-host <span style="color: #BA2121">&quot;on </span><span style="color: #19177C">$CMPNM</span><span style="color: #BA2121">&quot;</span>
+        <span style="color: #19177C">$CHKLSETUP</span><span style="color: #666666">=</span><span style="color: #BA2121">&quot;lsetup.</span><span style="color: #BB6688; font-weight: bold">${</span><span style="color: #19177C">CMPNM</span><span style="color: #BB6688; font-weight: bold">}</span><span style="color: #BA2121">.cfg&quot;</span>
+        <span style="color: #008000; font-weight: bold">if</span> <span style="color: #666666">(</span> Test-Path <span style="color: #BA2121">&quot;</span><span style="color: #19177C">$CHKLSETUP</span><span style="color: #BA2121">&quot;</span> <span style="color: #666666">)</span>
+        <span style="color: #666666">{</span>
+            <span style="color: #19177C">$LSETUPCFG</span><span style="color: #666666">=</span><span style="color: #19177C">$CHKLSETUP</span>
+        <span style="color: #666666">}</span>
+    <span style="color: #666666">}</span>
+<span style="color: #666666">}</span>
+
+<span style="color: #008000; font-weight: bold">if</span> <span style="color: #666666">(</span> <span style="color: #19177C">$TRACE</span> -gt <span style="color: #666666">0</span> <span style="color: #666666">)</span> <span style="color: #666666">{</span> write-host <span style="color: #BA2121">&quot;using LSETUPCFG=</span><span style="color: #19177C">$LSETUPCFG</span><span style="color: #BA2121">&quot;</span> <span style="color: #666666">}</span>
+
+<span style="color: #408080; font-style: italic"># not sure how to get/shift arguments in the official way, so implemented equiv of OPTIND with shift</span>
+
+<span style="color: #19177C">$MYARG1</span><span style="color: #666666">=</span><span style="color: #19177C">$args</span><span style="color: #666666">[</span><span style="color: #19177C">$POSARGSTART</span><span style="color: #666666">]</span>
+<span style="color: #19177C">$MYARG2</span><span style="color: #666666">=</span><span style="color: #19177C">$args</span><span style="color: #666666">[</span><span style="color: #19177C">$POSARGSTART</span>+1<span style="color: #666666">]</span>
+
+<span style="color: #008000; font-weight: bold">if</span> <span style="color: #666666">(</span> <span style="color: #19177C">$TRACE</span> -gt <span style="color: #666666">0</span> <span style="color: #666666">)</span> <span style="color: #666666">{</span> write-host <span style="color: #BA2121">&quot;MYARG1=</span><span style="color: #BB6688; font-weight: bold">${</span><span style="color: #19177C">MYARG1</span><span style="color: #BB6688; font-weight: bold">}</span><span style="color: #BA2121"> , MYARG2=</span><span style="color: #BB6688; font-weight: bold">${</span><span style="color: #19177C">MYARG2</span><span style="color: #BB6688; font-weight: bold">}</span><span style="color: #BA2121">&quot;</span> <span style="color: #666666">}</span>
+
+
+<span style="color: #408080; font-style: italic"># handle 1 parameter, 2 linked (requires type in the cfg) or 2 where 2nd is just data (type is empty in this case in the cfg)</span>
+<span style="color: #008000; font-weight: bold">if</span> <span style="color: #666666">(</span> <span style="color: #BA2121">&quot;</span><span style="color: #19177C">$MYARG2</span><span style="color: #BA2121">&quot;</span> -ne <span style="color: #BA2121">&quot;&quot;</span> <span style="color: #666666">)</span>
+<span style="color: #666666">{</span>
+    <span style="color: #408080; font-style: italic"># if TWO parameters provided, need to handle ones where 2nd param may be something to pass into script</span>
+    <span style="color: #408080; font-style: italic"># this is the case if the type in config is EMPTY</span>
+    jq --arg myjarg1 <span style="color: #BA2121">&quot;</span><span style="color: #19177C">$MYARG1</span><span style="color: #BA2121">&quot;</span> --arg myjarg2 <span style="color: #BA2121">&quot;</span><span style="color: #19177C">$MYARG2</span><span style="color: #BA2121">&quot;</span> <span style="color: #BA2121">&#39; . | select ( .service == $myjarg1 ) | select ( .type == $myjarg2 ) &#39;</span> <span style="color: #19177C">$LSETUPCFG</span> | Tee-Object -Variable TRUN &gt; Out-Null
+    <span style="color: #008000; font-weight: bold">if</span> <span style="color: #666666">(</span> <span style="color: #19177C">$TRACE</span> -gt <span style="color: #666666">0</span> <span style="color: #666666">)</span> <span style="color: #666666">{</span> write-host <span style="color: #BA2121">&quot;Steps: </span><span style="color: #19177C">$TRUN</span><span style="color: #BA2121">&quot;</span> <span style="color: #666666">}</span>
+
+    <span style="color: #008000; font-weight: bold">if</span> <span style="color: #666666">(</span> <span style="color: #BA2121">&quot;</span><span style="color: #19177C">$TRUN</span><span style="color: #BA2121">&quot;</span> -eq <span style="color: #BA2121">&quot;&quot;</span> <span style="color: #666666">)</span>
+    <span style="color: #666666">{</span>
+        jq --arg myjarg1 <span style="color: #BA2121">&quot;</span><span style="color: #19177C">$MYARG1</span><span style="color: #BA2121">&quot;</span> <span style="color: #BA2121">&#39; . | select ( .service == $myjarg1 ) | select ( .type == \&quot;\&quot; ) &#39;</span> <span style="color: #19177C">$LSETUPCFG</span> | Tee-Object -Variable TRUN &gt; Out-Null
+    <span style="color: #666666">}</span>
+<span style="color: #666666">}</span>
+<span style="color: #008000; font-weight: bold">else</span>
+<span style="color: #666666">{</span>
+    <span style="color: #408080; font-style: italic"># if ONE parameter passed, need to only select ones with no type</span>
+    jq --arg myjarg1 <span style="color: #BA2121">&quot;</span><span style="color: #19177C">$MYARG1</span><span style="color: #BA2121">&quot;</span> <span style="color: #BA2121">&#39; . | select ( .service == $myjarg1 )  | select ( .type == \&quot;\&quot; ) &#39;</span> <span style="color: #19177C">$LSETUPCFG</span> | Tee-Object -Variable TRUN &gt; Out-Null
+<span style="color: #666666">}</span>
+
+<span style="color: #008000; font-weight: bold">if</span> <span style="color: #666666">(</span> <span style="color: #19177C">$TRACE</span> -gt <span style="color: #666666">1</span> <span style="color: #666666">)</span> <span style="color: #666666">{</span> write-host <span style="color: #BA2121">&quot;Steps: </span><span style="color: #19177C">$TRUN</span><span style="color: #BA2121">&quot;</span> <span style="color: #666666">}</span>
+<span style="color: #008000">echo</span> <span style="color: #BA2121">&quot;</span><span style="color: #19177C">$TRUN</span><span style="color: #BA2121">&quot;</span> | jq -r <span style="color: #BA2121">&#39; .steps[] &#39;</span> &gt; <span style="color: #19177C">$TRUNSTEPS</span>
+
+<span style="color: #008000; font-weight: bold">if</span> <span style="color: #666666">(</span> <span style="color: #19177C">$TRACE</span> -gt <span style="color: #666666">1</span> <span style="color: #666666">)</span> <span style="color: #666666">{</span> cat <span style="color: #19177C">$TRUNSTEPS</span> <span style="color: #666666">}</span>
+
+
+ForEach <span style="color: #666666">(</span><span style="color: #19177C">$ASTEP</span> in Get-Content <span style="color: #19177C">$TRUNSTEPS</span><span style="color: #666666">)</span>
+<span style="color: #666666">{</span>
+    <span style="color: #008000; font-weight: bold">if</span> <span style="color: #666666">(</span> <span style="color: #19177C">$TRACE</span> -gt <span style="color: #666666">0</span> <span style="color: #666666">)</span> <span style="color: #666666">{</span> write-host <span style="color: #BA2121">&quot;running: </span><span style="color: #19177C">$ASTEP</span><span style="color: #BA2121">&quot;</span> <span style="color: #666666">}</span>
+    <span style="color: #408080; font-style: italic"># force to get input from terminal</span>
+    Invoke-Expression <span style="color: #19177C">$ASTEP</span>
+<span style="color: #666666">}</span>
+
+rm <span style="color: #19177C">$TRUNSTEPS</span>
+rm Out-Null
+</pre></div>

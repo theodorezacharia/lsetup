@@ -1,0 +1,61 @@
+<html>
+<head>
+<link rel="shortcut icon" href="images/lsetup.ico">
+<link rel="stylesheet" type="text/css" href="../tzbymain_nodarklink.css" />
+<style>
+	ul { list-style-type: none; margin: 30px; padding: 0px; }
+	li { margin: 0; padding: 10px;}
+</style>
+
+<style>
+.shellicon {
+	float: left;
+	width: 132px;
+	height: 132px;
+	display: block;
+	text-align: center;
+	padding-top: 60px;
+	background: url('images/shell-script.png') no-repeat 0 0;
+}
+
+.shellicon:hover {
+	background-position: 0 -12px;
+}
+</style>
+
+</head>
+
+<body>
+<div style="padding: 20px">
+Each day there are a number of repetetive tasks to do when I start my machine up, like starting the VPN, mounting drives, starting the <i>same</i> set
+of programs every day.  I got bored pressing the same buttons over and over again, so wrote a shell script to start up the apps and apply settings as requried
+for work and or home.  The <code>lsetup.sh</code> utility written by me takes a json config file which allows you to define the instructions to run as part of a group, so for example 
+running <code>./lsetup.sh work apps</code> will start up all your work apps as required, in the current workspace.  I typically switch to another workspace and run <code>./lsetup.sh home apps</code> to
+start my home applications.  Below are colourised versions of the files (main links) and the actual files themselves (see the download links).
+<ul>Local Setup (Bourne Posix/Linux/Unix) version - lsetup script, supporting scripts and example configuration files
+	<li><a href="./shell/machine_setup/lsetup.sh.html">lsetup.sh - The main script</a>&nbsp;<a href="./shell/machine_setup/lsetup.sh">(<img src="images/download.29075-200.png" width="20px">)</a></li>
+	<li><a href="./shell/machine_setup/lsetup.cfg.html">lsetup.cfg - The instruction configuration file</a>&nbsp;<a href="./shell/machine_setup/lsetup.cfg">(<img src="images/download.29075-200.png" width="20px">)</a></li>
+	<li><a href="./shell/machine_setup/lsetup.CerberusM19.cfg.html">lsetup.CerberusM19.cfg - A machine specific instruction configuration file</a>&nbsp;<a href="./shell/machine_setup/lsetup.CerberusM19.cfg">(<img src="images/download.29075-200.png" width="20px">)</a></li>
+	<li><a href="./shell/machine_setup/mlan.lsetup.sh.html">Supporting script to mount network drives</a>&nbsp;<a href="./shell/machine_setup/mlan.lsetup.sh">(<img src="images/download.29075-200.png" width="20px">)</a></li>
+	<li><a href="./shell/machine_setup/mounts.lsetup.conf.html">Drive mount points file</a>&nbsp;<a href="./shell/machine_setup/mounts.lsetup.conf">(<img src="images/download.29075-200.png" width="20px">)</a></li>
+</ul>
+<ul>Additional Linux Configuration
+	<li><a href="./shell/machine_setup/mateterm.lsetup.conf.html">Mate Terminal configuration file</a>&nbsp;<a href="./shell/machine_setup/mateterm.lsetup.conf">(<img src="images/download.29075-200.png" width="20px">)</a></li>
+	<li><a href="./shell/machine_setup/mateterm.workl.lsetup.conf.html">An alternate Mate Terminal configuration file</a>&nbsp;<a href="./shell/machine_setup/mateterm.workl.lsetup.conf">(<img src="images/download.29075-200.png" width="20px">)</a></li>
+	<li><a href="./shell/machine_setup/terminator.config.html">Terminator configuration file</a>&nbsp;<a href="./shell/machine_setup/terminator.config">(<img src="images/download.29075-200.png" width="20px"> to ~/.config/terminator/config)</a></li>
+</ul>
+<ul>Windows PowerShell version
+	<li><a href="./shell/machine_setup/lsetup.ps1.html">lsetup.ps1 - The main PowerShell script</a>&nbsp;<a href="./shell/machine_setup/lsetup.ps1">(<img src="images/download.29075-200.png" width="20px">)</a></li>
+	<li><a href="./shell/machine_setup/lsetup.Windows_NT.cfg.html">lsetup.Windows_NT.cfg - A Windows 10/11 specific example instruction configuration file</a>&nbsp;<a href="./shell/machine_setup/lsetup.Windows_NT.cfg">(<img src="images/download.29075-200.png" width="20px">)</a></li>
+</ul>
+The important part is the configuration of the <a href="./shell/machine_setup/lsetup.cfg.html">lsetup.cfg</a> file, take a look, I have given the actual file I use which does things like starting all my work and/or home apps with a single call, saves doing all that clicking each morning.
+<br>
+<ul>Additional External Info
+	<li>Linux (and Windows) Terminal <a href="https://towardsdatascience.com/how-to-get-an-amazing-terminal-91619a0beeb7" >configuration</a> 
+</ul>
+</div>
+<p><a href="javascript: history.go(-1)">Back</a>
+<br><a href="../index.html">Home</a>
+</body>
+</html>
+  
