@@ -29,9 +29,10 @@ $POSARGSTART=0
 $TRACE=0
 $i2=0
 
-write-host "There are a total of $($args.count) arguments"
+if ($TRACE -gt 0 ) { write-host "There are a total of $($args.count) arguments" }
+
 for ( $i = 0; $i -lt $args.count; $i++ ) {
-    write-host "Argument $i is $($args[$i])"
+    if ($TRACE -gt 0 ) { write-host "Argument $i is $($args[$i])" }
 
     if ( $args[$i] -eq '-t' ) {
         write-host "setting -t NOTE -T is same in PowerShell"

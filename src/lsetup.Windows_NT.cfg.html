@@ -1,23 +1,5 @@
 <div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span></span><span style="color: #666666">{</span>
 	<span style="color: #BA2121">&quot;service&quot;</span>: <span style="color: #BA2121">&quot;vpn&quot;</span>,
-	<span style="color: #BA2121">&quot;type&quot;</span>: <span style="color: #BA2121">&quot;np&quot;</span>,
-	<span style="color: #BA2121">&quot;description&quot;</span>: <span style="color: #BA2121">&quot;Setup VPN for np&quot;</span>,
-	<span style="color: #BA2121">&quot;steps&quot;</span> :
-	<span style="color: #666666">[</span>
-		<span style="color: #BA2121">&quot;sudo openvpn --config work/local/ops-nonlive.ovpn&quot;</span>
-	<span style="color: #666666">]</span>
-<span style="color: #666666">}</span>
-<span style="color: #666666">{</span>
-	<span style="color: #BA2121">&quot;service&quot;</span>: <span style="color: #BA2121">&quot;vpn&quot;</span>,
-	<span style="color: #BA2121">&quot;type&quot;</span>: <span style="color: #BA2121">&quot;pr&quot;</span>,
-	<span style="color: #BA2121">&quot;description&quot;</span>: <span style="color: #BA2121">&quot;Setup VPN for pr&quot;</span>,
-	<span style="color: #BA2121">&quot;steps&quot;</span> :
-	<span style="color: #666666">[</span>
-		<span style="color: #BA2121">&quot;echo sudo openvpn --config work/local/ops-live.ovpn&quot;</span>
-	<span style="color: #666666">]</span>
-<span style="color: #666666">}</span>
-<span style="color: #666666">{</span>
-	<span style="color: #BA2121">&quot;service&quot;</span>: <span style="color: #BA2121">&quot;vpn&quot;</span>,
 	<span style="color: #BA2121">&quot;type&quot;</span>: <span style="color: #BA2121">&quot;proton&quot;</span>,
 	<span style="color: #BA2121">&quot;description&quot;</span>: <span style="color: #BA2121">&quot;Setup VPN for Proton&quot;</span>,
 	<span style="color: #BA2121">&quot;steps&quot;</span> :
@@ -30,20 +12,9 @@
 	<span style="color: #666666">]</span>
 <span style="color: #666666">}</span>
 <span style="color: #666666">{</span>
-	<span style="color: #BA2121">&quot;service&quot;</span>: <span style="color: #BA2121">&quot;lan&quot;</span>,
-	<span style="color: #BA2121">&quot;type&quot;</span>: <span style="color: #BA2121">&quot;&quot;</span>,
-	<span style="color: #BA2121">&quot;description&quot;</span>: <span style="color: #BA2121">&quot;Setup mount point for network drive, Setting up LAN with optional filter for drives, use names from mounts.lsetup.conf&quot;</span>,
-	<span style="color: #BA2121">&quot;steps&quot;</span> :
-	<span style="color: #666666">[</span>
-		<span style="color: #BA2121">&quot;./mlan.lsetup.sh mounts.lsetup.conf </span><span style="color: #19177C">$2</span><span style="color: #BA2121">&quot;</span>,
-		<span style="color: #BA2121">&quot;echo \&quot;Mounting completed at </span><span style="color: #008000; font-weight: bold">$(</span>date<span style="color: #008000; font-weight: bold">)</span><span style="color: #BA2121">\&quot;&quot;</span>,
-		<span style="color: #BA2121">&quot;ffplay -nodisp -t 1 -autoexit ~/work/ddrive/userdata/sounds/notifications/access-granted-voice-ringtone.mp3 2&gt;/dev/null&quot;</span>
-	<span style="color: #666666">]</span>
-<span style="color: #666666">}</span>
-<span style="color: #666666">{</span>
 	<span style="color: #BA2121">&quot;service&quot;</span>: <span style="color: #BA2121">&quot;home&quot;</span>,
 	<span style="color: #BA2121">&quot;type&quot;</span>: <span style="color: #BA2121">&quot;t&quot;</span>,
-	<span style="color: #BA2121">&quot;description&quot;</span>: <span style="color: #BA2121">&quot;Open preconfigured terminal windows for home operations, to capture use: mate-terminal --save-config myconfig.test.conf&quot;</span>,
+	<span style="color: #BA2121">&quot;description&quot;</span>: <span style="color: #BA2121">&quot;Open preconfigured terminal windows for home operations&quot;</span>,
 	<span style="color: #BA2121">&quot;steps&quot;</span> :
 	<span style="color: #666666">[</span>
 		<span style="color: #BA2121">&quot;wt.exe -w 0 powershell -noexit -command \&quot;cd c:\\work\&quot;&quot;</span>,
@@ -61,7 +32,7 @@
 		<span style="color: #BA2121">&quot;sleep 2&quot;</span>,
 		<span style="color: #BA2121">&quot;if ( Get-Process thunderbird -ErrorAction SilentlyContinue -ErrorVariable ProcessError ) { write-host \&quot;thunderbird already running\&quot; } else { &amp; \&quot;C:\\Program Files\\Mozilla Thunderbird\\thunderbird.exe\&quot; } &quot;</span>,
 		<span style="color: #BA2121">&quot;sleep 2&quot;</span>,
-		<span style="color: #BA2121">&quot;if ( Get-Process Code -ErrorAction SilentlyContinue -ErrorVariable ProcessError ) { write-host \&quot;visual studio code already running\&quot; } else { &amp; \&quot;C:\\Users\\theod\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe\&quot; } &quot;</span>,
+		<span style="color: #BA2121">&quot;if ( [bool](Get-Process Code -ErrorAction SilentlyContinue -ErrorVariable ProcessError ) -And </span><span style="color: #19177C">$FORCEIT</span><span style="color: #BA2121"> -eq 0 ) { write-host \&quot;visual studio code already running\&quot; } else { &amp; \&quot;C:\\Users\\theod\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe\&quot; } &quot;</span>,
 		<span style="color: #BA2121">&quot;sleep 2&quot;</span>,
 		<span style="color: #BA2121">&quot;if ( Get-Process cherrytree -ErrorAction SilentlyContinue -ErrorVariable ProcessError ) { write-host \&quot;cherrytree already running\&quot; } else { &amp; \&quot;C:\\Program Files\\CherryTree\\mingw64\\bin\\cherrytree.exe\&quot; } &quot;</span>,
 		<span style="color: #BA2121">&quot;sleep 2&quot;</span>,
@@ -76,178 +47,14 @@
 	<span style="color: #BA2121">&quot;description&quot;</span>: <span style="color: #BA2121">&quot;Run all the work apps&quot;</span>,
 	<span style="color: #BA2121">&quot;steps&quot;</span> :
 	<span style="color: #666666">[</span>
-		<span style="color: #BA2121">&quot;if ( Get-Process upm -ErrorAction SilentlyContinue -ErrorVariable ProcessError ) { write-host \&quot;upm already running\&quot; } else { &amp; \&quot;C:\\Program Files (x86)\\UPM\\upm.bat\&quot; } &quot;</span>,
-		<span style="color: #BA2121">&quot;sleep 2&quot;</span>,
-		<span style="color: #BA2121">&quot;if ( Get-Process sublime_text -ErrorAction SilentlyContinue -ErrorVariable ProcessError ) { write-host \&quot;sublime already running\&quot; } else { &amp; \&quot;C:\\Program Files\\Sublime Text 3\\sublime_text.exe\&quot; } &quot;</span>,
+		<span style="color: #BA2121">&quot;#if ( Get-Process upm -ErrorAction SilentlyContinue -ErrorVariable ProcessError ) { write-host \&quot;upm already running\&quot; } else { &amp; \&quot;C:\\Program Files (x86)\\UPM\\upm.bat\&quot; } &quot;</span>,
+		<span style="color: #BA2121">&quot;#sleep 2&quot;</span>,
+		<span style="color: #BA2121">&quot;if ( [bool](Get-Process sublime_text -ErrorAction SilentlyContinue -ErrorVariable ProcessError) -And </span><span style="color: #19177C">$FORCEIT</span><span style="color: #BA2121"> -eq 0 ) { write-host \&quot;sublime already running\&quot; } else { &amp; \&quot;C:\\Program Files\\Sublime Text 3\\sublime_text.exe\&quot; } &quot;</span>,
 		<span style="color: #BA2121">&quot;sleep 2&quot;</span>,
 		<span style="color: #BA2121">&quot;if ( Get-Process chrome -ErrorAction SilentlyContinue -ErrorVariable ProcessError ) { write-host \&quot;Chrome already running\&quot; } else { &amp; \&quot;C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe\&quot; } &quot;</span>,
 		<span style="color: #BA2121">&quot;sleep 2&quot;</span>,
 		<span style="color: #BA2121">&quot;if ( Get-Process zim -ErrorAction SilentlyContinue -ErrorVariable ProcessError ) { write-host \&quot;Zim already running\&quot; } else { &amp; \&quot;C:\\Program Files\\Zim Desktop Wiki\\zim.exe\&quot; } &quot;</span>,
 		<span style="color: #BA2121">&quot;echo \&quot;Work Apps Started at </span><span style="color: #008000; font-weight: bold">$(</span>date<span style="color: #008000; font-weight: bold">)</span><span style="color: #BA2121">\&quot;&quot;</span>
-	<span style="color: #666666">]</span>
-<span style="color: #666666">}</span>
-<span style="color: #666666">{</span>
-	<span style="color: #BA2121">&quot;service&quot;</span>: <span style="color: #BA2121">&quot;work&quot;</span>,
-	<span style="color: #BA2121">&quot;type&quot;</span>: <span style="color: #BA2121">&quot;appz&quot;</span>,
-	<span style="color: #BA2121">&quot;description&quot;</span>: <span style="color: #BA2121">&quot;Run all the work apps&quot;</span>,
-	<span style="color: #BA2121">&quot;steps&quot;</span> :
-	<span style="color: #666666">[</span>
-		<span style="color: #BA2121">&quot;if ! pgrep upm.sh &gt;/dev/null ; then /home/theodore/tools/upm-1.15.1/upm.sh /home/theodore/work/ddrive/PDrive/iptpass ; sleep 1 ; fi &amp;&quot;</span>,
-		<span style="color: #BA2121">&quot;sleep 2&quot;</span>,
-		<span style="color: #BA2121">&quot;if ! pgrep chrome &gt;/dev/null ; then /usr/bin/google-chrome-stable \&quot;--profile-directory=Default\&quot; %U &gt;/dev/null 2&gt;/dev/null ; sleep 1 ; fi &amp;&quot;</span>,
-		<span style="color: #BA2121">&quot;sleep 2&quot;</span>,
-		<span style="color: #BA2121">&quot;if ! pgrep slack &gt;/dev/null ; then if which slack &gt;/dev/null ; then /usr/bin/slack %U &gt;/dev/null 2&gt;/dev/null ; sleep 1 ; else /usr/bin/flatpak run --branch=stable --arch=x86_64 --command=slack --file-forwarding com.slack.Slack @@u %U @@ ; sleep 1  ; fi ; fi &amp;&quot;</span>,
-		<span style="color: #BA2121">&quot;sleep 2&quot;</span>,
-		<span style="color: #BA2121">&quot;if ! pgrep zim &gt;/dev/null ; then /usr/bin/flatpak run --branch=stable --arch=x86_64 --command=zim --file-forwarding org.zim_wiki.Zim 2&gt;/dev/null ; sleep 1 ; fi &amp;&quot;</span>,
-		<span style="color: #BA2121">&quot;echo \&quot;Work Apps Started at </span><span style="color: #008000; font-weight: bold">$(</span>date<span style="color: #008000; font-weight: bold">)</span><span style="color: #BA2121">\&quot;&quot;</span>
-	<span style="color: #666666">]</span>
-<span style="color: #666666">}</span>
-<span style="color: #666666">{</span>
-	<span style="color: #BA2121">&quot;service&quot;</span>: <span style="color: #BA2121">&quot;work&quot;</span>,
-	<span style="color: #BA2121">&quot;type&quot;</span>: <span style="color: #BA2121">&quot;t&quot;</span>,
-	<span style="color: #BA2121">&quot;description&quot;</span>: <span style="color: #BA2121">&quot;Open preconfigured terminator windows for work operations on tpmem01&quot;</span>,
-	<span style="color: #BA2121">&quot;steps&quot;</span> :
-	<span style="color: #666666">[</span>
-		<span style="color: #BA2121">&quot;if ! pgrep terminator &gt;/dev/null || [ </span><span style="color: #19177C">$FORCEIT</span><span style="color: #BA2121"> -eq 1 ] ; then /usr/bin/terminator -g /home/theodore/work/ddrive/userdata/terminator/tpmem01 -T tpmem01 &gt;/dev/null 2&gt;/dev/null ; sleep 3 ; else echo &#39;Already running, use -f to force start&#39; ; fi &amp;&quot;</span>
-	<span style="color: #666666">]</span>
-<span style="color: #666666">}</span>
-<span style="color: #666666">{</span>
-	<span style="color: #BA2121">&quot;service&quot;</span>: <span style="color: #BA2121">&quot;work&quot;</span>,
-	<span style="color: #BA2121">&quot;type&quot;</span>: <span style="color: #BA2121">&quot;t2&quot;</span>,
-	<span style="color: #BA2121">&quot;description&quot;</span>: <span style="color: #BA2121">&quot;Open preconfigured terminator windows for work operations on tpmem02&quot;</span>,
-	<span style="color: #BA2121">&quot;steps&quot;</span> :
-	<span style="color: #666666">[</span>
-		<span style="color: #BA2121">&quot;if ! pgrep terminator &gt;/dev/null || [ </span><span style="color: #19177C">$FORCEIT</span><span style="color: #BA2121"> -eq 1 ] ; then /usr/bin/terminator -g /home/theodore/work/ddrive/userdata/terminator/tpmem02 -T tpmem02 &gt;/dev/null 2&gt;/dev/null ; sleep 3 ; else echo &#39;Already running, use -f to force start&#39; ; fi &amp;&quot;</span>
-	<span style="color: #666666">]</span>
-<span style="color: #666666">}</span>
-<span style="color: #666666">{</span>
-	<span style="color: #BA2121">&quot;service&quot;</span>: <span style="color: #BA2121">&quot;work&quot;</span>,
-	<span style="color: #BA2121">&quot;type&quot;</span>: <span style="color: #BA2121">&quot;tl&quot;</span>,
-	<span style="color: #BA2121">&quot;description&quot;</span>: <span style="color: #BA2121">&quot;Open preconfigured terminal windows for home operations, to capture use: mate-terminal --save-config myconfig.test.conf&quot;</span>,
-	<span style="color: #BA2121">&quot;steps&quot;</span> :
-	<span style="color: #666666">[</span>
-		<span style="color: #BA2121">&quot;mate-terminal --load-config=mateterm.workl.lsetup.conf&quot;</span>
-	<span style="color: #666666">]</span>
-<span style="color: #666666">}</span>
-<span style="color: #666666">{</span>
-	<span style="color: #BA2121">&quot;service&quot;</span>: <span style="color: #BA2121">&quot;vnc&quot;</span>,
-	<span style="color: #BA2121">&quot;type&quot;</span>: <span style="color: #BA2121">&quot;&quot;</span>,
-	<span style="color: #BA2121">&quot;description&quot;</span>: <span style="color: #BA2121">&quot;Start xvnc services for sharing the Desktop&quot;</span>,
-	<span style="color: #BA2121">&quot;steps&quot;</span> :
-	<span style="color: #666666">[</span>
-		<span style="color: #BA2121">&quot;sudo systemctl start x11vnc.service&quot;</span>
-	<span style="color: #666666">]</span>
-<span style="color: #666666">}</span>
-<span style="color: #666666">{</span>
-	<span style="color: #BA2121">&quot;service&quot;</span>: <span style="color: #BA2121">&quot;smb&quot;</span>,
-	<span style="color: #BA2121">&quot;type&quot;</span>: <span style="color: #BA2121">&quot;&quot;</span>,
-	<span style="color: #BA2121">&quot;description&quot;</span>: <span style="color: #BA2121">&quot;Start samba services for sharing disks with Windows&quot;</span>,
-	<span style="color: #BA2121">&quot;steps&quot;</span> :
-	<span style="color: #666666">[</span>
-		<span style="color: #BA2121">&quot;sudo touch /etc/libuser.conf&quot;</span>,
-		<span style="color: #BA2121">&quot;sudo system-config-samba &amp;&quot;</span>
-	<span style="color: #666666">]</span>
-<span style="color: #666666">}</span>
-<span style="color: #666666">{</span>
-	<span style="color: #BA2121">&quot;service&quot;</span>: <span style="color: #BA2121">&quot;syncme&quot;</span>,
-	<span style="color: #BA2121">&quot;type&quot;</span>: <span style="color: #BA2121">&quot;&quot;</span>,
-	<span style="color: #BA2121">&quot;description&quot;</span>: <span style="color: #BA2121">&quot;Syncing this script and files to a local share/backup&quot;</span>,
-	<span style="color: #BA2121">&quot;steps&quot;</span> :
-	<span style="color: #666666">[</span>
-		<span style="color: #BA2121">&quot;cp mounts.lsetup.conf ./work/home/shell/machine_setup/&quot;</span>,
-		<span style="color: #BA2121">&quot;cp mateterm.lsetup.conf ./work/home/shell/machine_setup/&quot;</span>,
-		<span style="color: #BA2121">&quot;cp mateterm.workl.lsetup.conf ./work/home/shell/machine_setup/&quot;</span>,
-		<span style="color: #BA2121">&quot;cp mlan.lsetup.sh ./work/home/shell/machine_setup/&quot;</span>,
-		<span style="color: #BA2121">&quot;cp lsetup.cfg ./work/home/shell/machine_setup/&quot;</span>,
-		<span style="color: #BA2121">&quot;cp lsetup.sh ./work/home/shell/machine_setup/&quot;</span>,
-		<span style="color: #BA2121">&quot;if [ </span><span style="color: #19177C">$?</span><span style="color: #BA2121"> -eq 0 ] ; then echo &#39;lsetup files synced&#39; ; aplay -q ~/work/ddrive/userdata/sounds/notifications/mixkit-confirmation-tone-2867.wav ; else echo &#39;failed to sync lsetup files&#39; ; fi &quot;</span>
-	<span style="color: #666666">]</span>
-<span style="color: #666666">}</span>
-<span style="color: #666666">{</span>
-	<span style="color: #BA2121">&quot;service&quot;</span>: <span style="color: #BA2121">&quot;ytup&quot;</span>,
-	<span style="color: #BA2121">&quot;type&quot;</span>: <span style="color: #BA2121">&quot;&quot;</span>,
-	<span style="color: #BA2121">&quot;description&quot;</span>: <span style="color: #BA2121">&quot;Updates youtube-dl, the youtube downloader&quot;</span>,
-	<span style="color: #BA2121">&quot;steps&quot;</span> :
-	<span style="color: #666666">[</span>
-		<span style="color: #BA2121">&quot;sudo youtube-dl -U&quot;</span>
-	<span style="color: #666666">]</span>
-<span style="color: #666666">}</span>
-<span style="color: #666666">{</span>
-	<span style="color: #BA2121">&quot;service&quot;</span>: <span style="color: #BA2121">&quot;YTDL&quot;</span>,
-	<span style="color: #BA2121">&quot;type&quot;</span>: <span style="color: #BA2121">&quot;&quot;</span>,
-	<span style="color: #BA2121">&quot;description&quot;</span>: <span style="color: #BA2121">&quot;Downloads youtube-dl, the youtube downloader&quot;</span>,
-	<span style="color: #BA2121">&quot;steps&quot;</span> :
-	<span style="color: #666666">[</span>
-		<span style="color: #BA2121">&quot;sudo wget https://yt-dl.org/downloads/latest/youtube-dl -O /usr/bin/youtube-dl&quot;</span>,
-		<span style="color: #BA2121">&quot;sudo chmod a+rx /usr/bin/youtube-dl&quot;</span>
-	<span style="color: #666666">]</span>
-<span style="color: #666666">}</span>
-<span style="color: #666666">{</span>
-	<span style="color: #BA2121">&quot;service&quot;</span>: <span style="color: #BA2121">&quot;res&quot;</span>,
-	<span style="color: #BA2121">&quot;type&quot;</span>: <span style="color: #BA2121">&quot;Leviathan&quot;</span>,
-	<span style="color: #BA2121">&quot;description&quot;</span>: <span style="color: #BA2121">&quot;Set the screen resolution&quot;</span>,
-	<span style="color: #BA2121">&quot;steps&quot;</span> :
-	<span style="color: #666666">[</span>
-		<span style="color: #BA2121">&quot;xrandr --output DVI-I-2 --set underscan on --set \&quot;underscan vborder\&quot; 30 --set \&quot;underscan hborder\&quot; 30&quot;</span>
-	<span style="color: #666666">]</span>
-<span style="color: #666666">}</span>
-<span style="color: #666666">{</span>
-	<span style="color: #BA2121">&quot;service&quot;</span>: <span style="color: #BA2121">&quot;res&quot;</span>,
-	<span style="color: #BA2121">&quot;type&quot;</span>: <span style="color: #BA2121">&quot;ViperM19&quot;</span>,
-	<span style="color: #BA2121">&quot;description&quot;</span>: <span style="color: #BA2121">&quot;Set the screen resolution&quot;</span>,
-	<span style="color: #BA2121">&quot;steps&quot;</span> :
-	<span style="color: #666666">[</span>
-		<span style="color: #BA2121">&quot;xrandr --newmode \&quot;1680x1050_60.00\&quot;  146.25  1680 1784 1960 2240  1050 1053 1059 1089 -hsync +vsync&quot;</span>,
-		<span style="color: #BA2121">&quot;xrandr --addmode \&quot;1680x1050_60.00\&quot;  146.25  1680 1784 1960 2240  1050 1053 1059 1089 -hsync +vsync&quot;</span>,
-		<span style="color: #BA2121">&quot;xrandr --addmode HDMI-1 1680x1050_60.00&quot;</span>,
-		<span style="color: #BA2121">&quot;xrandr --output HDMI-1 --mode \&quot;1680x1050_60.00\&quot;&quot;</span>
-	<span style="color: #666666">]</span>
-<span style="color: #666666">}</span>
-<span style="color: #666666">{</span>
-	<span style="color: #BA2121">&quot;service&quot;</span>: <span style="color: #BA2121">&quot;res&quot;</span>,
-	<span style="color: #BA2121">&quot;type&quot;</span>: <span style="color: #BA2121">&quot;AtlantaM20&quot;</span>,
-	<span style="color: #BA2121">&quot;description&quot;</span>: <span style="color: #BA2121">&quot;Set the screen resolution, can use: \&quot;./lsetup.sh res </span><span style="color: #008000; font-weight: bold">$(</span>uname -n<span style="color: #008000; font-weight: bold">)</span><span style="color: #BA2121">\&quot;&quot;</span>,
-	<span style="color: #BA2121">&quot;steps&quot;</span> :
-	<span style="color: #666666">[</span>
-		<span style="color: #BA2121">&quot;xrandr --newmode \&quot;1920x1080_60.00\&quot;  173.00  1920 2048 2248 2576  1080 1083 1088 1120 -hsync +vsync&quot;</span>,
-		<span style="color: #BA2121">&quot;xrandr --addmode DVI-0 \&quot;1920x1080_60.00\&quot;&quot;</span>,
-		<span style="color: #BA2121">&quot;xrandr --output DVI-0 --mode \&quot;1920x1080_60.00\&quot;&quot;</span>
-	<span style="color: #666666">]</span>
-<span style="color: #666666">}</span>
-<span style="color: #666666">{</span>
-	<span style="color: #BA2121">&quot;service&quot;</span>: <span style="color: #BA2121">&quot;kc&quot;</span>,
-	<span style="color: #BA2121">&quot;type&quot;</span>: <span style="color: #BA2121">&quot;&quot;</span>,
-	<span style="color: #BA2121">&quot;description&quot;</span>: <span style="color: #BA2121">&quot;Quickly kill any hanging chrome instances, currently kills something else, so beware !&quot;</span>,
-	<span style="color: #BA2121">&quot;steps&quot;</span> :
-	<span style="color: #666666">[</span>
-		<span style="color: #BA2121">&quot;for A in `ps -ef | grep field | awk &#39;{print </span><span style="color: #19177C">$2</span><span style="color: #BA2121">}&#39;`; do kill -9 </span><span style="color: #19177C">$A</span><span style="color: #BA2121">;done&quot;</span>
-	<span style="color: #666666">]</span>
-<span style="color: #666666">}</span>
-<span style="color: #666666">{</span>
-	<span style="color: #BA2121">&quot;service&quot;</span>: <span style="color: #BA2121">&quot;wakeup&quot;</span>,
-	<span style="color: #BA2121">&quot;type&quot;</span>: <span style="color: #BA2121">&quot;Cerberus&quot;</span>,
-	<span style="color: #BA2121">&quot;description&quot;</span>: <span style="color: #BA2121">&quot;Send wakeonlan message to Cerberus&quot;</span>,
-	<span style="color: #BA2121">&quot;steps&quot;</span> :
-	<span style="color: #666666">[</span>
-		<span style="color: #BA2121">&quot;wakeonlan 50:e5:49:d3:6a:fe&quot;</span>
-	<span style="color: #666666">]</span>
-<span style="color: #666666">}</span>
-<span style="color: #666666">{</span>
-	<span style="color: #BA2121">&quot;service&quot;</span>: <span style="color: #BA2121">&quot;wakeup&quot;</span>,
-	<span style="color: #BA2121">&quot;type&quot;</span>: <span style="color: #BA2121">&quot;Galactica&quot;</span>,
-	<span style="color: #BA2121">&quot;description&quot;</span>: <span style="color: #BA2121">&quot;Send wakeonlan message to Galactica&quot;</span>,
-	<span style="color: #BA2121">&quot;steps&quot;</span> :
-	<span style="color: #666666">[</span>
-		<span style="color: #BA2121">&quot;wakeonlan 00:1d:09:ef:c6:90&quot;</span>
-	<span style="color: #666666">]</span>
-<span style="color: #666666">}</span>
-<span style="color: #666666">{</span>
-	<span style="color: #BA2121">&quot;service&quot;</span>: <span style="color: #BA2121">&quot;wakeup&quot;</span>,
-	<span style="color: #BA2121">&quot;type&quot;</span>: <span style="color: #BA2121">&quot;Deepstar5&quot;</span>,
-	<span style="color: #BA2121">&quot;description&quot;</span>: <span style="color: #BA2121">&quot;Send wakeonlan message to Deepstar5&quot;</span>,
-	<span style="color: #BA2121">&quot;steps&quot;</span> :
-	<span style="color: #666666">[</span>
-		<span style="color: #BA2121">&quot;wakeonlan 00:1a:a0:b5:3f:3f&quot;</span>
 	<span style="color: #666666">]</span>
 <span style="color: #666666">}</span>
 </pre></div>
