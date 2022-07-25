@@ -29,7 +29,7 @@ Below are colourised versions of the files (main links) and the actual files the
 
 ## Additional Linux Configuration
 * [Mate Terminal configuration file](src/mateterm.lsetup.conf)
-* [An alternate Mate Terminal configuration file](src/mateterm.lsetup.conf)
+* [An alternate Mate Terminal configuration file](src/mateterm.workl.lsetup.conf)
 * [Terminator configuration file ( to ~/.config/terminator/config)](src/terminator.config)
 
 ## Configuration Info
