@@ -55,6 +55,8 @@
 	<span style="color: #008000; font-weight: bold">&quot;description&quot;</span>: <span style="color: #BA2121">&quot;Run all the home apps&quot;</span>,
 	<span style="color: #008000; font-weight: bold">&quot;steps&quot;</span> :
 	[
+		<span style="color: #BA2121">&quot;if test $(uname -n) = PegasusM20 ; then ./lsetup.sh home t ; fi&quot;</span>,
+		<span style="color: #BA2121">&quot;sleep 1&quot;</span>,
 		<span style="color: #BA2121">&quot;if ! pgrep firefox &gt;/dev/null ; then firefox ; sleep 2 ; fi &amp;&quot;</span>,
 		<span style="color: #BA2121">&quot;sleep 2&quot;</span>,
 		<span style="color: #BA2121">&quot;if ! pgrep thunderbird &gt;/dev/null ; then thunderbird ; sleep 2 ; fi &amp;&quot;</span>,
