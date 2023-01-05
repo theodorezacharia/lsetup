@@ -1,15 +1,15 @@
 <div class="highlight" style="background: #f8f8f8"><pre style="line-height: 125%"><span></span>{
-        <span style="color: #008000; font-weight: bold">&quot;service&quot;</span>: <span style="color: #BA2121">&quot;vpn&quot;</span>,
-        <span style="color: #008000; font-weight: bold">&quot;type&quot;</span>: <span style="color: #BA2121">&quot;proton&quot;</span>,
-        <span style="color: #008000; font-weight: bold">&quot;description&quot;</span>: <span style="color: #BA2121">&quot;Setup VPN for Proton&quot;</span>,
-        <span style="color: #008000; font-weight: bold">&quot;steps&quot;</span> :
-        [
-                <span style="color: #BA2121">&quot;VPNLIST=&#39;jp-free-01.protonvpn.net.udp.ovpn nl-free-01.protonvpn.net.udp.ovpn us-free-01.protonvpn.net.udp.ovpn&#39;&quot;</span>,
-                <span style="color: #BA2121">&quot;VPNRND=$[ $RANDOM % 3 + 1 ]&quot;</span>,
-                <span style="color: #BA2121">&quot;VPNCFG=$(echo $VPNLIST | cut -d&#39; &#39; -f $VPNRND)&quot;</span>,
-                <span style="color: #BA2121">&quot;echo Using ProtonVPN: $VPNCFG&quot;</span>,
-                <span style="color: #BA2121">&quot;sudo openvpn --config work/ddrive/PDrive/ProtonVPN/$VPNCFG&quot;</span>
-        ]
+	<span style="color: #008000; font-weight: bold">&quot;service&quot;</span>: <span style="color: #BA2121">&quot;vpn&quot;</span>,
+	<span style="color: #008000; font-weight: bold">&quot;type&quot;</span>: <span style="color: #BA2121">&quot;proton&quot;</span>,
+	<span style="color: #008000; font-weight: bold">&quot;description&quot;</span>: <span style="color: #BA2121">&quot;Setup VPN for Proton&quot;</span>,
+	<span style="color: #008000; font-weight: bold">&quot;steps&quot;</span> :
+	[
+		<span style="color: #BA2121">&quot;VPNLIST=&#39;jp-free-01.protonvpn.net.udp.ovpn nl-free-01.protonvpn.net.udp.ovpn us-free-01.protonvpn.net.udp.ovpn&#39;&quot;</span>,
+		<span style="color: #BA2121">&quot;VPNRND=$[ $RANDOM % 3 + 1 ]&quot;</span>,
+		<span style="color: #BA2121">&quot;VPNCFG=$(echo $VPNLIST | cut -d&#39; &#39; -f $VPNRND)&quot;</span>,
+		<span style="color: #BA2121">&quot;echo Using ProtonVPN: $VPNCFG&quot;</span>,
+		<span style="color: #BA2121">&quot;sudo openvpn --config work/ddrive/PDrive/ProtonVPN/$VPNCFG&quot;</span>
+	]
 }
 {
 	<span style="color: #008000; font-weight: bold">&quot;service&quot;</span>: <span style="color: #BA2121">&quot;lan&quot;</span>,
@@ -71,17 +71,17 @@
 	<span style="color: #008000; font-weight: bold">&quot;steps&quot;</span> :
 	[
 		<span style="color: #BA2121">&quot;cp lsetup.CerberusM19.cfg ./work/home/shell/machine_setup&quot;</span>,
-		<span style="color: #BA2121">&quot;if [ $? -eq 0 ] ; then echo &#39;lsetup files synced&#39; ; aplay -q ~/work/ddrive/userdata/sounds/notifications/mixkit-confirmation-tone-2867.wav ; else echo &#39;failed to sync lsetup files&#39; ; fi &quot;</span>
+		<span style="color: #BA2121">&quot;if [ $? -eq 0 ] ; then echo &#39;lsetup files synced&#39; ; else echo &#39;failed to sync lsetup files&#39; ; fi &quot;</span>
 
 	]
 }
 {
-	<span style="color: #008000; font-weight: bold">&quot;service&quot;</span>: <span style="color: #BA2121">&quot;kc&quot;</span>,
+	<span style="color: #008000; font-weight: bold">&quot;service&quot;</span>: <span style="color: #BA2121">&quot;plex&quot;</span>,
 	<span style="color: #008000; font-weight: bold">&quot;type&quot;</span>: <span style="color: #BA2121">&quot;&quot;</span>,
-	<span style="color: #008000; font-weight: bold">&quot;description&quot;</span>: <span style="color: #BA2121">&quot;Quickly kill any hanging chrome instances, currently kills something else, so beware !&quot;</span>,
+	<span style="color: #008000; font-weight: bold">&quot;description&quot;</span>: <span style="color: #BA2121">&quot;change Plex media server status&quot;</span>,
 	<span style="color: #008000; font-weight: bold">&quot;steps&quot;</span> :
 	[
-		<span style="color: #BA2121">&quot;for A in `ps -ef | grep field | awk &#39;{print $2}&#39;`; do kill -9 $A;done&quot;</span>
+		<span style="color: #BA2121">&quot;sudo systemctl $2 plexmediaserver&quot;</span>
 	]
 }
 </pre></div>

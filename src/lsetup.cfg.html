@@ -18,6 +18,15 @@
 }
 {
 	<span style="color: #008000; font-weight: bold">&quot;service&quot;</span>: <span style="color: #BA2121">&quot;vpn&quot;</span>,
+	<span style="color: #008000; font-weight: bold">&quot;type&quot;</span>: <span style="color: #BA2121">&quot;test&quot;</span>,
+	<span style="color: #008000; font-weight: bold">&quot;description&quot;</span>: <span style="color: #BA2121">&quot;Test VPN connection for ops&quot;</span>,
+	<span style="color: #008000; font-weight: bold">&quot;steps&quot;</span> :
+	[
+		<span style="color: #BA2121">&quot;curl -s https://vpn-test-emzo-kops1.service.ops.iptho.co.uk/ | sed -E &#39;s/&lt;[^&gt;]*&gt;//g&#39;&quot;</span>
+	]
+}
+{
+	<span style="color: #008000; font-weight: bold">&quot;service&quot;</span>: <span style="color: #BA2121">&quot;vpn&quot;</span>,
 	<span style="color: #008000; font-weight: bold">&quot;type&quot;</span>: <span style="color: #BA2121">&quot;proton&quot;</span>,
 	<span style="color: #008000; font-weight: bold">&quot;description&quot;</span>: <span style="color: #BA2121">&quot;Setup VPN for Proton&quot;</span>,
 	<span style="color: #008000; font-weight: bold">&quot;steps&quot;</span> :
@@ -167,6 +176,15 @@
 }
 {
 	<span style="color: #008000; font-weight: bold">&quot;service&quot;</span>: <span style="color: #BA2121">&quot;res&quot;</span>,
+	<span style="color: #008000; font-weight: bold">&quot;type&quot;</span>: <span style="color: #BA2121">&quot;&quot;</span>,
+	<span style="color: #008000; font-weight: bold">&quot;description&quot;</span>: <span style="color: #BA2121">&quot;Set the screen resolution&quot;</span>,
+	<span style="color: #008000; font-weight: bold">&quot;steps&quot;</span> :
+	[
+		<span style="color: #BA2121">&quot;./lsetup.sh res $(uname -n)&quot;</span>
+	]
+}
+{
+	<span style="color: #008000; font-weight: bold">&quot;service&quot;</span>: <span style="color: #BA2121">&quot;res&quot;</span>,
 	<span style="color: #008000; font-weight: bold">&quot;type&quot;</span>: <span style="color: #BA2121">&quot;Leviathan&quot;</span>,
 	<span style="color: #008000; font-weight: bold">&quot;description&quot;</span>: <span style="color: #BA2121">&quot;Set the screen resolution&quot;</span>,
 	<span style="color: #008000; font-weight: bold">&quot;steps&quot;</span> :
@@ -195,6 +213,17 @@
 		<span style="color: #BA2121">&quot;xrandr --newmode \&quot;1920x1080_60.00\&quot;  173.00  1920 2048 2248 2576  1080 1083 1088 1120 -hsync +vsync&quot;</span>,
 		<span style="color: #BA2121">&quot;xrandr --addmode DVI-0 \&quot;1920x1080_60.00\&quot;&quot;</span>,
 		<span style="color: #BA2121">&quot;xrandr --output DVI-0 --mode \&quot;1920x1080_60.00\&quot;&quot;</span>
+	]
+}
+{
+	<span style="color: #008000; font-weight: bold">&quot;service&quot;</span>: <span style="color: #BA2121">&quot;res&quot;</span>,
+	<span style="color: #008000; font-weight: bold">&quot;type&quot;</span>: <span style="color: #BA2121">&quot;TiddyM&quot;</span>,
+	<span style="color: #008000; font-weight: bold">&quot;description&quot;</span>: <span style="color: #BA2121">&quot;Set the screen resolution, can use: \&quot;./lsetup.sh res $(uname -n)\&quot;&quot;</span>,
+	<span style="color: #008000; font-weight: bold">&quot;steps&quot;</span> :
+	[
+		<span style="color: #BA2121">&quot;xrandr --newmode \&quot;1680x1050_60.00\&quot;  146.25  1680 1784 1960 2240  1050 1053 1059 1089 -hsync +vsync&quot;</span>,
+		<span style="color: #BA2121">&quot;xrandr --addmode VGA-1 \&quot;1680x1050_60.00\&quot;&quot;</span>,
+		<span style="color: #BA2121">&quot;xrandr --output VGA-1 --mode \&quot;1680x1050_60.00\&quot;&quot;</span>
 	]
 }
 {
