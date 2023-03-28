@@ -82,7 +82,7 @@
 	<span style="color: #008000; font-weight: bold">&quot;steps&quot;</span> :
 	[
 		<span style="color: #BA2121">&quot;if test $(uname -n) = PegasusM20 ; then ./lsetup.sh work tl ; fi&quot;</span>,
-		<span style="color: #BA2121">&quot;if ! pgrep upm.sh &gt;/dev/null ; then /home/theodore/tools/upm-1.15.1/upm.sh /home/theodore/work/ddrive/PDrive/iptpass ; sleep 1 ; fi &amp;&quot;</span>,
+		<span style="color: #BA2121">&quot;if ! pgrep upm.sh &gt;/dev/null ; then ~/tools/upm-1.15.1/upm.sh ~/work/ddrive/PDrive/iptpass ; sleep 1 ; fi &amp;&quot;</span>,
 		<span style="color: #BA2121">&quot;sleep 5&quot;</span>,
 		<span style="color: #BA2121">&quot;if ! pgrep chrome &gt;/dev/null ; then /usr/bin/google-chrome-stable \&quot;--profile-directory=Default\&quot; %U &gt;/dev/null 2&gt;/dev/null ; sleep 1 ; fi &amp;&quot;</span>,
 		<span style="color: #BA2121">&quot;sleep 2&quot;</span>,
@@ -100,7 +100,7 @@
 	<span style="color: #008000; font-weight: bold">&quot;description&quot;</span>: <span style="color: #BA2121">&quot;Open preconfigured terminator windows for work operations on tpmem01&quot;</span>,
 	<span style="color: #008000; font-weight: bold">&quot;steps&quot;</span> :
 	[
-		<span style="color: #BA2121">&quot;if ! pgrep terminator &gt;/dev/null || [ $FORCEIT -eq 1 ] ; then /usr/bin/terminator -g /home/theodore/work/ddrive/userdata/terminator/tpmem01 -T tpmem01 &gt;/dev/null 2&gt;/dev/null ; sleep 3 ; else echo &#39;Already running, use -f to force start&#39; ; fi &amp;&quot;</span>
+		<span style="color: #BA2121">&quot;if ! pgrep terminator &gt;/dev/null || [ $FORCEIT -eq 1 ] ; then /usr/bin/terminator -g ~/work/ddrive/userdata/terminator/tpmem01 -T tpmem01 &gt;/dev/null 2&gt;/dev/null ; sleep 3 ; else echo &#39;Already running, use -f to force start&#39; ; fi &amp;&quot;</span>
 	]
 }
 {
@@ -109,7 +109,7 @@
 	<span style="color: #008000; font-weight: bold">&quot;description&quot;</span>: <span style="color: #BA2121">&quot;Open preconfigured terminator windows for work operations on tpmem02&quot;</span>,
 	<span style="color: #008000; font-weight: bold">&quot;steps&quot;</span> :
 	[
-		<span style="color: #BA2121">&quot;if ! pgrep terminator &gt;/dev/null || [ $FORCEIT -eq 1 ] ; then /usr/bin/terminator -g /home/theodore/work/ddrive/userdata/terminator/tpmem02 -T tpmem02 &gt;/dev/null 2&gt;/dev/null ; sleep 3 ; else echo &#39;Already running, use -f to force start&#39; ; fi &amp;&quot;</span>
+		<span style="color: #BA2121">&quot;if ! pgrep terminator &gt;/dev/null || [ $FORCEIT -eq 1 ] ; then /usr/bin/terminator -g ~/work/ddrive/userdata/terminator/tpmem02 -T tpmem02 &gt;/dev/null 2&gt;/dev/null ; sleep 3 ; else echo &#39;Already running, use -f to force start&#39; ; fi &amp;&quot;</span>
 	]
 }
 {
@@ -260,6 +260,26 @@
 	<span style="color: #008000; font-weight: bold">&quot;steps&quot;</span> :
 	[
 		<span style="color: #BA2121">&quot;wakeonlan ma:ca:dd:re:ss:zz&quot;</span>
+	]
+}
+{
+	<span style="color: #008000; font-weight: bold">&quot;service&quot;</span>: <span style="color: #BA2121">&quot;mfa&quot;</span>,
+	<span style="color: #008000; font-weight: bold">&quot;type&quot;</span>: <span style="color: #BA2121">&quot;list&quot;</span>,
+	<span style="color: #008000; font-weight: bold">&quot;description&quot;</span>: <span style="color: #BA2121">&quot;list the keys&quot;</span>,
+	<span style="color: #008000; font-weight: bold">&quot;steps&quot;</span> :
+	[
+        <span style="color: #BA2121">&quot;jq -r &#39; .[].name &#39; ~/work/home/ipt/env/gauth-export.json &quot;</span>
+	]
+}
+{
+	<span style="color: #008000; font-weight: bold">&quot;service&quot;</span>: <span style="color: #BA2121">&quot;mfa&quot;</span>,
+	<span style="color: #008000; font-weight: bold">&quot;type&quot;</span>: <span style="color: #BA2121">&quot;&quot;</span>,
+	<span style="color: #008000; font-weight: bold">&quot;description&quot;</span>: <span style="color: #BA2121">&quot;Call oathtool to get MFA/2FA code using export from GAuth json file&quot;</span>,
+	<span style="color: #008000; font-weight: bold">&quot;steps&quot;</span> :
+	[
+        <span style="color: #BA2121">&quot;shift 1; VO=&#39;\&quot;&#39;$@&#39;\&quot;&#39; &quot;</span>,
+        <span style="color: #BA2121">&quot;T1=$$.tmp ; jq -r &#39; .[] | select( .\&quot;name\&quot; | contains(&#39;\&quot;$VO\&quot;&#39;) ).secret &#39; ~/work/home/ipt/env/gauth-export.json &gt; $T1 ; if [ $(wc -l $T1 | awk &#39;{print $1}&#39;) -eq 1 ] ; then  D=$(date  +%S) ; if [ $D -gt 29 ] ; then TTL=`expr 59 - $D` ; else TTL=`expr 29 - $D` ; fi ; printf &#39; &#39;$TTL&#39; &#39; ; oathtool -b --totp $(cat $T1) ; else echo &#39;no unique entry found&#39; ; fi ; rm -f $T1&quot;</span>,
+        <span style="color: #BA2121">&quot;# can also do printf OATHCODE | xclip -sel clip&quot;</span>
 	]
 }
 </pre></div>
