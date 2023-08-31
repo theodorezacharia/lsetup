@@ -1,6 +1,7 @@
 # Author: Theodore Zacharia
 # V0.1 - 23/09/2021 - Initial Release, extend lsetup to take json config file input
 # V0.2 - 07/07/2022 - Add options for which config file to process
+# V0.3 - 12/06/2023 - Change top level structure in cfg file to an array form
 #
 # Execute instructions in the json config file
 # Config files are in order of preference: Machine name specific, o/s specific, default.
@@ -46,7 +47,8 @@ case $AOPT in
 	echo "   * lsetup.$(uname -n).cfg (this is one based on your machine name, highest priority)"
 	echo " "
 	echo "The following features are supported:"
-	jq -r ' .service + " " + .type + "\t\t- " + .description ' $LSETUPCFG
+	#jq -r ' [].service + " " + [].type + "\t\t- " + [].description ' $LSETUPCFG
+	jq -r '.[] | (.service + " " +  .type + "\t\t- " + .description)' $LSETUPCFG
 	EL=$?
 	if [ $EL -gt 1 ] ; then echo "Looks like the config file $LSETUPCFG has errors" ; fi
 	exit $EL ;;
@@ -94,14 +96,14 @@ if [ -n "$2" ]
 then
 	# if TWO parameters provided, need to handle ones where 2nd param may be something to pass into script
 	# this is the case if the type in config is EMPTY
-	TRUN=$(jq ' . | select ( .service == "'$1'" ) | select ( .type == "'$2'" ) ' $LSETUPCFG)
+	TRUN=$(jq ' .[] | select ( .service == "'$1'" ) | select ( .type == "'$2'" ) ' $LSETUPCFG)
 	if [ ! -n "$TRUN" ]
 	then
-		TRUN=$(jq ' . | select ( .service == "'$1'" ) | select ( .type == "" ) ' $LSETUPCFG)
+		TRUN=$(jq ' .[] | select ( .service == "'$1'" ) | select ( .type == "" ) ' $LSETUPCFG)
 	fi
 else
 	# if ONE parameter passed, need to only select ones with no type
-	TRUN=$(jq ' . | select ( .service == "'$1'" ) | select ( .type == "" ) ' $LSETUPCFG)
+	TRUN=$(jq ' .[] | select ( .service == "'$1'" ) | select ( .type == "" ) ' $LSETUPCFG)
 fi
 
 if [ $TRACE -gt 1 ] ; then echo "$TRUN" ; fi
