@@ -2,7 +2,7 @@
 Local Setup - Setup your workday/homeday machine by starting apps you regularly need, no need for all that clicking
 
 
-Each day there are a number of repetetive tasks to do when I start my machine up, like starting the VPN, mounting drives, starting the same set of programs every day.
+Each day there are a number of repetitive tasks to do when I start my machine up, like starting the VPN, mounting drives, starting the same set of programs every day.
 
 I got bored pressing the same buttons over and over again, so wrote a shell script to start up the apps and apply settings as requried for work and or home.
 
