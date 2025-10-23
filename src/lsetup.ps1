@@ -1,6 +1,7 @@
 <#
 Author: Theodore Zacharia
 V0.1 - 19/07/2022 - Initial Release of Windows PowerShell version, from V0.2 Bourne shell version
+V0.2 - 16/06/2023 - Change top level structure in cfg file to an array form
 
 Execute instructions in the json config file
 Config files are in order of preference: Machine name specific, o/s specific, default.
@@ -119,18 +120,18 @@ if ( "$MYARG2" -ne "" )
 {
     # if TWO parameters provided, need to handle ones where 2nd param may be something to pass into script
     # this is the case if the type in config is EMPTY
-    jq --arg myjarg1 "$MYARG1" --arg myjarg2 "$MYARG2" ' . | select ( .service == $myjarg1 ) | select ( .type == $myjarg2 ) ' $LSETUPCFG | Tee-Object -Variable TRUN > Out-Null
+    jq --arg myjarg1 "$MYARG1" --arg myjarg2 "$MYARG2" ' .[] | select ( .service == $myjarg1 ) | select ( .type == $myjarg2 ) ' $LSETUPCFG | Tee-Object -Variable TRUN > Out-Null
     if ( $TRACE -gt 0 ) { write-host "Steps: $TRUN" }
 
     if ( "$TRUN" -eq "" )
     {
-        jq --arg myjarg1 "$MYARG1" ' . | select ( .service == $myjarg1 ) | select ( .type == \"\" ) ' $LSETUPCFG | Tee-Object -Variable TRUN > Out-Null
+        jq --arg myjarg1 "$MYARG1" ' .[] | select ( .service == $myjarg1 ) | select ( .type == \"\" ) ' $LSETUPCFG | Tee-Object -Variable TRUN > Out-Null
     }
 }
 else
 {
     # if ONE parameter passed, need to only select ones with no type
-    jq --arg myjarg1 "$MYARG1" ' . | select ( .service == $myjarg1 )  | select ( .type == \"\" ) ' $LSETUPCFG | Tee-Object -Variable TRUN > Out-Null
+    jq --arg myjarg1 "$MYARG1" ' .[] | select ( .service == $myjarg1 )  | select ( .type == \"\" ) ' $LSETUPCFG | Tee-Object -Variable TRUN > Out-Null
 }
 
 if ( $TRACE -gt 1 ) { write-host "Steps: $TRUN" }
