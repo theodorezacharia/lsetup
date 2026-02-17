@@ -38,4 +38,4 @@ The important part is the configuration of the *lsetup.cfg* file, take a look, I
 
 ## Additional External Info
 
-* Linux (and Windows) Terminal [configuration](https://towardsdatascience.com/how-to-get-an-amazing-terminal-91619a0beeb7)
+* Linux (and Windows) Terminal [configuration](https://towardsdatascience.com/how-to-set-up-an-amazing-terminal-for-data-science-with-oh-my-zsh-plugins-2518dfeeab5d/)
